@@ -1,0 +1,247 @@
+https://github.com/imartinez/privateGPT/tree/primordial
+
+Python Version: To use this software, you must have Python 3.10 or later installed. Earlier versions of Python will not compile.
+
+1. Get the code from https://github.com/imartinez/privateGPT/tree/primordial
+	git clone -b primordial https://github.com/imartinez/privateGPT.git
+
+2. cd privateGPT/
+
+3. pip install -r requirements.txt
+
+4. Download the LLM(default): ggml-gpt4all-j-v1.3-groovy.bin
+	mkdir models
+	Copy the ggml-gpt4all-j-v1.3-groovy.bin file to privateGPT/models directory
+
+5. Copy the example.env template into .env
+	cp example.env .env
+
+6. Put any and all your files into the source_documents directory
+
+7. Run the following command to ingest all the data.
+	python ingest.py
+
+8. In order to ask a question, run a command like:
+	python privateGPT.py
+	
+	And wait for the script to require your input.
+	> Enter a query:
+
+
+
+
+root@phosphorus:/home/ESCAPE-ENG.COM/tsip/srikanth/privateGPT# python3 ingest.py
+Traceback (most recent call last):
+  File "/home/ESCAPE-ENG.COM/tsip/srikanth/privateGPT/ingest.py", line 32, in <module>
+    from constants import CHROMA_SETTINGS
+  File "/home/ESCAPE-ENG.COM/tsip/srikanth/privateGPT/constants.py", line 3, in <module>
+    from chromadb.config import Settings
+  File "/usr/local/lib/python3.11/dist-packages/chromadb/__init__.py", line 69, in <module>
+    raise RuntimeError(
+RuntimeError: Your system has an unsupported version of sqlite3. Chroma requires sqlite3 >= 3.35.0.
+Please visit https://docs.trychroma.com/troubleshooting#sqlite to learn how to upgrade.
+
+
+root@phosphorus:/home/ESCAPE-ENG.COM/tsip/srikanth/privateGPT# sqlite3 --version
+3.31.1 2020-01-27 19:55:54 3bfa9cc97da10598521b342961df8f5f68c7388fa117345eeb516eaa837balt1
+
+root@phosphorus:/home/ESCAPE-ENG.COM/tsip/srikanth/privateGPT# apt install sqlite3
+Reading package lists... Done
+Building dependency tree
+Reading state information... Done
+sqlite3 is already the newest version (3.31.1-4ubuntu0.6).
+The following packages were automatically installed and are no longer required:
+  gir1.2-goa-1.0 libfwupdplugin1 libpython3.10-minimal libpython3.10-stdlib libxmlb1 python3.10-lib2to3 python3.10-minimal
+Use 'apt autoremove' to remove them.
+0 upgraded, 0 newly installed, 0 to remove and 106 not upgraded.
+
+
+Workaround: https://stackoverflow.com/questions/77004853/chromadb-langchain-with-sentencetransformerembeddingfunction-throwing-sqlite3/77447882#77447882
+
+pip install pysqlite3-binary 
+
+import pysqlite3
+import sys
+sys.modules["sqlite3"] = sys.modules.pop("pysqlite3")
+
+Add above 3 lines before import chromadb.
+
+
+
+
+root@phosphorus:/home/ESCAPE-ENG.COM/tsip/srikanth/privateGPT# python3 privateGPT.py
+Found model file at  models/ggml-gpt4all-j-v1.3-groovy.bin
+gptj_model_load: loading model from 'models/ggml-gpt4all-j-v1.3-groovy.bin' - please wait ...
+gptj_model_load: n_vocab = 50400
+gptj_model_load: n_ctx   = 2048
+gptj_model_load: n_embd  = 4096
+gptj_model_load: n_head  = 16
+gptj_model_load: n_layer = 28
+gptj_model_load: n_rot   = 64
+gptj_model_load: f16     = 2
+gptj_model_load: ggml ctx size = 5401.45 MB
+gptj_model_load: kv self size  =  896.00 MB
+gptj_model_load: ................................... done
+gptj_model_load: model size =  3609.38 MB / num tensors = 285
+
+Enter a query: what are the holidays in October for bangalore location?
+
+ The only holiday mentioned is Independance day on August 15th.
+
+> Question:
+what are the holidays in October for bangalore location?
+
+> Answer (took 163.26 s.):
+ The only holiday mentioned is Independance day on August 15th.
+
+> source_documents/TSIP_Corporate_ Holidays List 2024 and Guidelines.pdf:
+from the list. Members are requested to select the optional holiday in advance (by the end of
+January 2024) so that your project team can plan the activities accordingly.
+
+TSIP - National & Festival Holidays - 2024, Bangalore Office
+
+Sl. No.
+Date
+Day
+Occasion
+1
+January 1, 2024
+Monday
+New Year's Day
+2
+January 26, 2024
+Friday
+Republic Day
+3
+April 9, 2024
+Tuesday
+Ugadi
+4
+April 11, 2024
+Thursday
+Ramzan-Id
+5
+May 1, 2024
+Wednesday
+May Day
+6
+August 15, 2024
+Thursday
+
+> source_documents/TSIP_Corporate_ Holidays List 2024 and Guidelines.pdf:
+7
+August 15, 2024
+Thursday
+Independence Day
+8
+October 2, 2024
+Wednesday
+Gandhi Jayanti
+9
+November 1, 2024
+Friday
+Diwali
+10
+December 25, 2024
+Wednesday
+Christmas
+
+TSIP - Optional Holidays – 2024, Bangalore & Pune Office
+
+Sl. No.
+Date
+Day
+Occasion
+1
+January 15, 2024
+Monday
+Makara Sankranti
+2
+March 8, 2024
+Friday
+Mahashivaratri
+3
+March 25, 2024
+Monday
+Holi
+4
+March 29, 2024
+Friday
+Good Friday
+5
+April 17, 2024
+Wednesday
+Ram Navami
+6
+May 23, 2024
+
+> source_documents/TSIP_Corporate_ Holidays List 2024 and Guidelines.pdf:
+Wednesday
+May Day
+6
+August 15, 2024
+Thursday
+Independence Day
+7
+October 2, 2024
+Wednesday
+Gandhi Jayanti
+8
+October 31, 2024
+Thursday
+Narak Chaturdashi/Diwali/ Deepavali
+9
+November 1, 2024
+Friday
+Kannada Rajyotsava
+10
+December 25, 2024
+Wednesday
+Christmas
+
+> source_documents/TSIP_Corporate_ Holidays List 2024 and Guidelines.pdf:
+Toshiba Software (India) Pvt. Ltd
+TSIP Internal
+
+
+
+ TSIP_Holiday calendar 2024
+
+Page 3 of 3
+
+TSIP - National & Festival Holidays - 2024, Pune Office
+
+Sl. No.
+Date
+Day
+Occasion
+1
+January 1, 2024
+Monday
+New Year's Day
+2
+January 26, 2024
+Friday
+Republic Day
+3
+March 25, 2024
+Monday
+Holi
+4
+April 9, 2024
+Tuesday
+Gudhi Padwa
+5
+April 11, 2024
+Thursday
+Ramzan-Id
+6
+May 1, 2024
+Wednesday
+Maharashtra Day/May Day
+7
+August 15, 2024
+Thursday
+Independence Day
+
+Enter a query:
